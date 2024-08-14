@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { FaTrashAlt, FaEdit } from "react-icons/fa"; // Import icons from react-icons
+import { FaTrashAlt, FaEdit, FaArrowLeft } from "react-icons/fa"; // Import icons from react-icons
 
 const CreateFlashcardPage = () => {
   const navigate = useNavigate();
@@ -67,7 +67,14 @@ const CreateFlashcardPage = () => {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
+    <div className="relative p-8 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-4 right-4 flex items-center px-4 py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300 transition"
+      >
+        <FaArrowLeft className="h-5 w-5 mr-2" />
+        <span>Go Back</span>
+      </button>
       <h1 className="text-4xl font-bold mb-8 text-center">
         Create New Flashcard
       </h1>
