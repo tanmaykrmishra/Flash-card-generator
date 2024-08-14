@@ -1,31 +1,47 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { FaTrashAlt, FaEdit } from "react-icons/fa"; // Import icons from react-icons
 
 const CreateFlashcardPage = () => {
   const navigate = useNavigate();
+  const termRefs = useRef([]);
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
-      terms: [{ term: "", definition: "" }], // Start with one term and definition
+      terms: [{ term: "", definition: "" }],
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Title is required"),
       description: Yup.string().required("Description is required"),
-      terms: Yup.array().of(
-        Yup.object({
-          term: Yup.string().required("Term is required"),
-          definition: Yup.string().required("Definition is required"),
-        })
-      ),
+      terms: Yup.array()
+        .of(
+          Yup.object({
+            term: Yup.string().required("Term is required"),
+            definition: Yup.string().required("Definition is required"),
+          })
+        )
+        .min(1, "At least one term and definition is required"),
     }),
+    validateOnChange: false,
+    validateOnBlur: true,
     onSubmit: (values) => {
+      // Check if there is at least one term and definition
+      const hasValidTerm = values.terms.some(
+        (term) => term.term.trim() !== "" && term.definition.trim() !== ""
+      );
+
+      if (!hasValidTerm) {
+        alert("At least one term and definition is required.");
+        return;
+      }
+
       const flashcards = JSON.parse(localStorage.getItem("flashcards")) || [];
       const newFlashcard = {
-        id: Date.now(), // Generate a unique ID
+        id: Date.now(),
         title: values.title,
         description: values.description,
         terms: values.terms,
@@ -38,48 +54,70 @@ const CreateFlashcardPage = () => {
     },
   });
 
+  // Check if there is at least one valid term and definition
+  const isButtonDisabled = !formik.values.terms.some(
+    (term) => term.term.trim() !== "" && term.definition.trim() !== ""
+  );
+
+  const handleEditClick = (index) => {
+    // Focus on the term input for the specified index
+    if (termRefs.current[index]) {
+      termRefs.current[index].focus();
+    }
+  };
+
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold mb-6">Create New Flashcard</h1>
+    <div className="p-8 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
+      <h1 className="text-4xl font-bold mb-8 text-center">
+        Create New Flashcard
+      </h1>
       <form onSubmit={formik.handleSubmit}>
         {/* Main Flashcard Form */}
-        <div className="mb-6">
-          <label htmlFor="title" className="block text-sm font-medium mb-2">
+        <div className="mb-8">
+          <label htmlFor="title" className="block text-lg font-medium mb-2">
             Title
           </label>
           <input
             id="title"
             type="text"
             name="title"
+            placeholder="Enter the title"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.title}
-            className={`border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              formik.errors.title ? "border-red-500" : "border-gray-300"
+            className={`border p-4 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              formik.touched.title && formik.errors.title
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
           />
-          {formik.errors.title && (
+          {formik.touched.title && formik.errors.title && (
             <div className="text-red-500 text-sm mt-2">
               {formik.errors.title}
             </div>
           )}
         </div>
-        <div className="mb-6">
+        <div className="mb-8">
           <label
             htmlFor="description"
-            className="block text-sm font-medium mb-2"
+            className="block text-lg font-medium mb-2"
           >
             Description
           </label>
           <textarea
             id="description"
             name="description"
+            placeholder="Enter a description"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.description}
-            className={`border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              formik.errors.description ? "border-red-500" : "border-gray-300"
+            className={`border p-4 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              formik.touched.description && formik.errors.description
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
           />
-          {formik.errors.description && (
+          {formik.touched.description && formik.errors.description && (
             <div className="text-red-500 text-sm mt-2">
               {formik.errors.description}
             </div>
@@ -90,29 +128,33 @@ const CreateFlashcardPage = () => {
         {formik.values.terms.map((term, index) => (
           <div
             key={index}
-            className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50"
+            className="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 relative"
           >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Term {index + 1}</h2>
-              {formik.values.terms.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    formik.setFieldValue(
-                      "terms",
-                      formik.values.terms.filter((_, i) => i !== index)
-                    )
-                  }
-                  className="text-red-500 hover:underline"
-                >
-                  Delete Term
-                </button>
-              )}
+            <div className="absolute top-4 right-4 flex space-x-2">
+              <button
+                type="button"
+                onClick={() =>
+                  formik.setFieldValue(
+                    "terms",
+                    formik.values.terms.filter((_, i) => i !== index)
+                  )
+                }
+                className="text-red-500 hover:text-red-700"
+              >
+                <FaTrashAlt className="h-6 w-6" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleEditClick(index)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <FaEdit className="h-6 w-6" />
+              </button>
             </div>
             <div className="mb-4">
               <label
                 htmlFor={`terms[${index}].term`}
-                className="block text-sm font-medium mb-2"
+                className="block text-lg font-medium mb-2"
               >
                 Term
               </label>
@@ -120,47 +162,56 @@ const CreateFlashcardPage = () => {
                 id={`terms[${index}].term`}
                 type="text"
                 name={`terms[${index}].term`}
+                placeholder="Enter the term"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={term.term}
-                className={`border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                ref={(el) => (termRefs.current[index] = el)}
+                className={`border p-4 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  formik.touched.terms?.[index]?.term &&
                   formik.errors.terms?.[index]?.term
                     ? "border-red-500"
                     : "border-gray-300"
                 }`}
               />
-              {formik.errors.terms?.[index]?.term && (
-                <div className="text-red-500 text-sm mt-2">
-                  {formik.errors.terms[index].term}
-                </div>
-              )}
+              {formik.touched.terms?.[index]?.term &&
+                formik.errors.terms?.[index]?.term && (
+                  <div className="text-red-500 text-sm mt-2">
+                    {formik.errors.terms[index].term}
+                  </div>
+                )}
             </div>
             <div className="mb-4">
               <label
                 htmlFor={`terms[${index}].definition`}
-                className="block text-sm font-medium mb-2"
+                className="block text-lg font-medium mb-2"
               >
                 Definition
               </label>
               <textarea
                 id={`terms[${index}].definition`}
                 name={`terms[${index}].definition`}
+                placeholder="Enter the definition"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={term.definition}
-                className={`border p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`border p-4 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  formik.touched.terms?.[index]?.definition &&
                   formik.errors.terms?.[index]?.definition
                     ? "border-red-500"
                     : "border-gray-300"
                 }`}
               />
-              {formik.errors.terms?.[index]?.definition && (
-                <div className="text-red-500 text-sm mt-2">
-                  {formik.errors.terms[index].definition}
-                </div>
-              )}
+              {formik.touched.terms?.[index]?.definition &&
+                formik.errors.terms?.[index]?.definition && (
+                  <div className="text-red-500 text-sm mt-2">
+                    {formik.errors.terms[index].definition}
+                  </div>
+                )}
             </div>
           </div>
         ))}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-8">
           <button
             type="button"
             onClick={() =>
@@ -169,14 +220,19 @@ const CreateFlashcardPage = () => {
                 { term: "", definition: "" },
               ])
             }
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
           >
             Add Term
           </button>
         </div>
         <button
           type="submit"
-          className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold"
+          disabled={isButtonDisabled}
+          className={`px-8 py-4 rounded-lg font-semibold transition ${
+            isButtonDisabled
+              ? "bg-gray-400 text-white cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-700"
+          }`}
         >
           Create Flashcard
         </button>

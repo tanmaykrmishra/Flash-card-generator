@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ShareModal from "../components/ShareModal"; // Ensure this path is correct
+import ShareModal from "../components/ShareModal"; 
 
 const FlashcardDetails = () => {
   const { id } = useParams();
