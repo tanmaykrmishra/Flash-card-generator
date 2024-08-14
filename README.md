@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# Flashcard Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Flashcard Generator is a React.js application that allows users to create, view, and manage flashcards. It features a clean and intuitive user interface, built with modern React tools and libraries.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Create Flashcard Page**: Add new flashcards with prompts and answers.
+- **My Flashcards Page**: View and manage all created flashcards.
+- **Flashcard Details Page**: Review the details of a specific flashcard.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Pages
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Create Flashcard Page**: 
+   - Allows users to create new flashcards.
+   - Utilizes Formik for form handling.
 
-### `npm test`
+2. **My Flashcards Page**: 
+   - Displays a list of all flashcards created by the user.
+   - Allows users to edit or delete flashcards.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Flashcard Details Page**: 
+   - Shows the details of a selected flashcard.
 
-### `npm run build`
+## Libraries/Packages
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **[react-router-dom](https://www.npmjs.com/package/react-router-dom)**: For handling routing and navigation.
+- **[react-redux](https://www.npmjs.com/package/react-redux)**: For state management.
+- **[react-icons](https://react-icons.github.io/react-icons/)**: For adding icons to the application.
+- **[Formik](https://formik.org/)**: For form handling and validation.
+- **[Tailwind CSS](https://tailwindcss.com/docs/installation)**: For styling the application with utility-first CSS.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/flashcard-generator.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd flashcard-generator
+   ```
+3. Install the dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **/src**: Contains all the source code.
+  - **/components**: Reusable React components.
+  - **/pages**: Contains the different pages of the application.
+  - **/redux**: Redux setup and slices.
+  - **/styles**: Tailwind CSS configuration and custom styles.
+  - **/utils**: Utility functions and helpers.
+- **/public**: Public assets and HTML file.
+- **/hooks**: Custom React hooks if any.
+- **/types**: TypeScript definitions if using TypeScript.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Create a Flashcard**: Navigate to the "Create Flashcard" page, fill out the form, and submit.
+- **View Flashcards**: Go to the "My Flashcards" page to see all your flashcards.
+- **Edit/Delete Flashcards**: Click on a flashcard to view details, and use the provided options to edit or delete.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Create a new Pull Request.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Code Splitting
+## Contact
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+For any questions or feedback, please reach out to [tanmaykumarmishra5@gmail.com].
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
